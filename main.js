@@ -71,3 +71,23 @@ function saveIssue(e){
     // Stop JS from doing the default form submission, we've taken care of that
     e.preventDefault();
 }
+
+function setStatusClosed(id) {
+    // Set Status Closed handles these lines in each of the issue HTML blocks:
+    //     '<a href="#" ' +
+    //             'class="btn btn-warning" ' +
+    //             'onclick="setStatusClosed(\'' + id + '\')">Close</a>
+
+    // The id of the current issue item is a parameter
+
+    //Get the corresponding item in JSON format, from localStorage
+    var issues = JSON.parse(localStorage.getItem('issues'));
+    for(var i = 0; i < issues.length; i++){
+        if (issues[i].id == id){
+            issues[i].status = 'Closed';
+        }
+    }
+    localStorage.setItem('issues', JSON.stringify(issues));
+    fetchIssues();
+}
+
