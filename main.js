@@ -38,26 +38,27 @@ function fetchIssues() {
 // <button type="submit" class="btn btn-primary">Add</button>
 document.getElementById('issueImportForm').addEventListener('submit', saveIssue);
 
-function saveIssue(e){
+function saveIssue(e) {
     // First, retrieve and store all the variables
-    var issueId = change.guid(); // generate an id using change module
+    var issueId = 0;
+    // var issueId = change.guid(); // generate an id using change module
     var issueDesc = document.getElementById('issueDescInput').value;
     var issueSeverity = document.getElementById('issueSeverityInput').value;
     var issueAssignedTo = document.getElementById('issueAssignedToInput').value;
     var issueStatus = 'Open';
     var issue = {
-        id:issueId,
+        id: issueId,
         description: issueDesc,
         severity: issueSeverity,
         assignedTo: issueAssignedTo,
         status: issueStatus
-    }
+    };
 
-    if (localStorage.getItem('issues') === null){
+    if (localStorage.getItem('issues') === null) {
         var issues = [];
         issues.push(issue);
         localStorage.setItem('issues', JSON.stringify(issues));
-    } else{
+    } else {
         var issues = JSON.parse(localStorage.getItem('issues'));
         issues.push(issue);
         localStorage.setItem('issues', JSON.stringify(issues))
@@ -82,8 +83,8 @@ function setStatusClosed(id) {
 
     //Get the corresponding item in JSON format, from localStorage
     var issues = JSON.parse(localStorage.getItem('issues'));
-    for(var i = 0; i < issues.length; i++){
-        if (issues[i].id == id){
+    for (var i = 0; i < issues.length; i++) {
+        if (issues[i].id == id) {
             issues[i].status = 'Closed';
         }
     }
@@ -91,3 +92,14 @@ function setStatusClosed(id) {
     fetchIssues();
 }
 
+function deleteIssue(id) {
+    var issues = JSON.parse(localStorage.getItem('issues'));
+    for (var i = 0; i < issues.length; i++) {
+        if (issues[i] == id) {
+            issues.splice(i, 1);  //Remove 1 item from index i (and return it)
+        }
+    }
+    localStorage.setItem('issues', JSON.stringify(issues));
+
+    fetchIssues();
+}
