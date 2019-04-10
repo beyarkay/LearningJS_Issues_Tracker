@@ -38,3 +38,36 @@ function fetchIssues() {
 // <button type="submit" class="btn btn-primary">Add</button>
 document.getElementById('issueImportForm').addEventListener('submit', saveIssue);
 
+function saveIssue(e){
+    // First, retrieve and store all the variables
+    var issueId = change.guid(); // generate an id using change module
+    var issueDesc = document.getElementById('issueDescInput').value;
+    var issueSeverity = document.getElementById('issueSeverityInput').value;
+    var issueAssignedTo = document.getElementById('issueAssignedToInput').value;
+    var issueStatus = 'Open';
+    var issue = {
+        id:issueId,
+        description: issueDesc,
+        severity: issueSeverity,
+        assignedTo: issueAssignedTo,
+        status: issueStatus
+    }
+
+    if (localStorage.getItem('issues') === null){
+        var issues = [];
+        issues.push(issue);
+        localStorage.setItem('issues', JSON.stringify(issues));
+    } else{
+        var issues = JSON.parse(localStorage.getItem('issues'));
+        issues.push(issue);
+        localStorage.setItem('issues', JSON.stringify(issues))
+    }
+    // Now that we have what we want, remove the old data from the form
+    document.getElementById('issueInputForm').reset();
+
+    // Regenerate the output list to actually make the new issue visible
+    fetchIssues();
+
+    // Stop JS from doing the default form submission, we've taken care of that
+    e.preventDefault();
+}
